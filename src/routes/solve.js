@@ -22,8 +22,8 @@ if(process.env.MEMCACHIER_SERVERS !== undefined) {
 }
 
 function computeParams (req, res, next){
-  compute.url = process.env.RHINO_COMPUTE_URL
-  compute.apiKey = process.env.RHINO_COMPUTE_KEY
+  RhinoCompute.url = getAuth( 'http://localhost:8081/' ) // RhinoCompute server url. Use http://localhost:8081 if debugging locally.
+  RhinoCompute.apiKey = getAuth( '123456789' )  // RhinoCompute server api key. Leave blank if debugging locally.
   next()
 }
 

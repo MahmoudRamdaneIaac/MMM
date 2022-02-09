@@ -23,8 +23,8 @@ const getParams = require('../definitions.js').getParams
  * Set url and apikey used to communicate with a compute server
  */
 function setComputeParams (){
-  RhinoCompute.url = getAuth( 'http://localhost:8081/' )
-  RhinoCompute.apiKey = getAuth( '123456789' )
+  compute.url = process.env.RHINO_COMPUTE_URL
+  compute.apiKey = process.env.RHINO_COMPUTE_KEY
 }
 
 /**
