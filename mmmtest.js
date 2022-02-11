@@ -5,7 +5,12 @@ import rhino3dm from "https://cdn.jsdelivr.net/npm/rhino3dm@7.11.1/rhino3dm.modu
 import { RhinoCompute } from "https://cdn.jsdelivr.net/npm/compute-rhino3d@0.13.0-beta/compute.rhino3d.module.js";
 import { Rhino3dmLoader } from "https://cdn.jsdelivr.net/npm/three@0.124.0/examples/jsm/loaders/3DMLoader.js";
 
+
+
 const definitionName = "mmm.gh";
+
+
+
 
 // Set up sliders
 const length_slider = document.getElementById('Length')
@@ -27,11 +32,14 @@ tramedestructure_slider.addEventListener('touchend', onSliderChange, false)
 const loader = new Rhino3dmLoader()
 loader.setLibraryPath('https://cdn.jsdelivr.net/npm/rhino3dm@0.15.0-beta/')
 
+
+
 let rhino, definition, doc
 rhino3dm().then(async m => {
     console.log('Loaded rhino3dm.')
     rhino = m // global
 
+    
   //RhinoCompute.url = getAuth( 'RHINO_COMPUTE_URL' ) // RhinoCompute server url. Use http://localhost:8081 if debugging locally.
   //RhinoCompute.apiKey = getAuth( 'RHINO_COMPUTE_KEY' )  // RhinoCompute server api key. Leave blank if debugging locally.
 
@@ -46,8 +54,12 @@ rhino3dm().then(async m => {
   definition = arr;
 
   init();
+
   compute();
 });
+
+
+
 //set up tthe sliderrs
 
 async function compute() {
@@ -145,6 +157,7 @@ async function compute() {
     // add object graph from rhino model to three.js scene
     scene.add(object);
 
+
   });
 }
 
@@ -158,6 +171,8 @@ function onSliderChange() {
 // THREE BOILERPLATE //
 let scene, camera, renderer, controls;
 
+
+
 function init() {
       //Change up to z-axis
 THREE.Object3D.DefaultUp = new THREE.Vector3( 0, 0, 1 )
@@ -170,6 +185,22 @@ THREE.Object3D.DefaultUp = new THREE.Vector3( 0, 0, 1 )
   
   camera.position.set( -20, 20, 20 ); // all components equal
   camera.lookAt( scene.position ); // or the origin
+
+  /**
+ * This function is called when the download button is clicked
+ */
+function download () {
+  // write rhino doc to "blob"
+  const bytes = doc.toByteArray()
+  const blob = new Blob([bytes], {type: "application/octect-stream"})
+
+  // use "hidden link" trick to get the browser to download the blob
+  const filename = data.definition.replace(/\.gh$/, '') + '.3dm'
+  const link = document.createElement('a')
+  link.href = window.URL.createObjectURL(blob)
+  link.download = filename
+  link.click()
+}
 
   // create the renderer and add it to the html
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -192,6 +223,7 @@ THREE.Object3D.DefaultUp = new THREE.Vector3( 0, 0, 1 )
   hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
   hemiLight.position.set( 0, 0, 100 );
   scene.add( hemiLight );
+  
 
 
   
@@ -202,9 +234,22 @@ THREE.Object3D.DefaultUp = new THREE.Vector3( 0, 0, 1 )
 
 function animate() {
   requestAnimationFrame(animate);
+  scene.traverse(function(child){
+    if (child.isMesh){
+        child.rotation.z +=0.001
+        
+    }else{(child.isLine)
+      child.rotation.z +=0.001
+    }})
+    
+    
   renderer.render(scene, camera);
 }
 
+
+requestAnimationFrame( animate );
+
+    
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
