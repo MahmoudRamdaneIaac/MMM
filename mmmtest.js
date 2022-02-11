@@ -165,10 +165,10 @@ THREE.Object3D.DefaultUp = new THREE.Vector3( 0, 0, 1 )
   scene = new THREE.Scene()
   scene.background = new THREE.Color(0x0000);
   var aspect = window.innerWidth / window.innerHeight;
-  var d = 25;
+  var d = 30;
   camera = new THREE.OrthographicCamera( - d * aspect, d * aspect, d, - d, 1, 1000 );
   
-  camera.position.set( 20, -20, 20 ); // all components equal
+  camera.position.set( -20, 20, 20 ); // all components equal
   camera.lookAt( scene.position ); // or the origin
 
   // create the renderer and add it to the html
@@ -181,16 +181,16 @@ THREE.Object3D.DefaultUp = new THREE.Vector3( 0, 0, 1 )
 
   // add a directional light
   const directionalLight = new THREE.DirectionalLight(0xffffff);
-  directionalLight.intensity =5;
+  directionalLight.intensity =20;
   scene.add(directionalLight);
 
   const light = new THREE.AmbientLight( 0x404040 ); // soft white light
   scene.add( light );
 
-  const hemiLight = new THREE.HemisphereLight( 0x404040 , 0x404040 , 3 );
+  const hemiLight = new THREE.HemisphereLight( 0x404040 , 0x404040 , 1);
   hemiLight.color.setHSL( 0.6, 1, 0.6 );
   hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
-  hemiLight.position.set( 0, 100, 0 );
+  hemiLight.position.set( 0, 0, 100 );
   scene.add( hemiLight );
 
 
