@@ -71,7 +71,6 @@ async function compute() {
     const res = await RhinoCompute.Grasshopper.evaluateDefinition(definition, trees)
 
     doc = new rhino.File3dm()
-    
 
     // hide spinner
     document.getElementById('loader').style.display = 'none'
@@ -113,64 +112,4 @@ function onSliderChange() {
     // show spinner
     document.getElementById('loader').style.display = 'block'
     compute()
-}
-
-
-
-
-
-// BOILERPLATE //
-
-let scene, camera, renderer, controls
-
-function init() {
-
-
-    //Change up to z-axis
-THREE.Object3D.DefaultUp = new THREE.Vector3( 0, 0, 1 )
-    // create a scene and a camera
-    scene = new THREE.Scene()
-    scene.background = new THREE.Color(0xe7d7d1);
-let ScreenW = window.innerWidth;
-let ScreenH = window.innerHeight;
-let ARatio = ScreenW/ScreenH;
-camera = new THREE.PerspectiveCamera(20, ARatio,0.1, 1000 );
-camera.position.set(30, -100, 45); 
-
-
-    // create the renderer and add it to the html
-    renderer = new THREE.WebGLRenderer({ antialias: true })
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    document.body.appendChild(renderer.domElement)
-
-    // add some controls to orbit the camera
-    controls = new OrbitControls(camera, renderer.domElement)
-
-    // add a directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff)
-    directionalLight.intensity = 2
-    scene.add(directionalLight)
-
-    const ambientLight = new THREE.AmbientLight()
-    scene.add(ambientLight)
-
-    animate()
-}
-
-function animate() {
-    requestAnimationFrame(animate)
-    renderer.render(scene, camera)
-}
-
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight
-    camera.updateProjectionMatrix()
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    animate()
-}
-
-function meshToThreejs(mesh, material) {
-    const loader = new THREE.BufferGeometryLoader()
-    const geometry = loader.parse(mesh.toThreejsJSON())
-    return new THREE.Mesh(geometry, material)
 }
