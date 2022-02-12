@@ -5,7 +5,9 @@ import rhino3dm from "https://cdn.jsdelivr.net/npm/rhino3dm@7.11.1/rhino3dm.modu
 import { RhinoCompute } from "https://cdn.jsdelivr.net/npm/compute-rhino3d@0.13.0-beta/compute.rhino3d.module.js";
 import { Rhino3dmLoader } from "https://cdn.jsdelivr.net/npm/three@0.124.0/examples/jsm/loaders/3DMLoader.js";
 
-
+            //this is for music background
+            var audio = document.getElementById("audio1");
+            audio.volume = 0.2;
 
 const definitionName = "mmm.gh";
 
@@ -181,11 +183,8 @@ function onSliderChange() {
 }
 
 
-
 // THREE BOILERPLATE //
 let scene, camera, renderer, controls;
-
-
 
 function init() {
       //Change up to z-axis
@@ -288,7 +287,7 @@ function takeScreenshot() {
         b.href = url;
         b.download = 'maison.png';
         b.click();
-      }, 'image/png', 3.0);
+      }, 'image/png', 20.0);
    }
 
 
