@@ -6,7 +6,7 @@
         <title>MAISON</title>
 <style>
             
-            body { background-color: rgb(0, 0, 0); }
+            body { background-color: rgb(0, 99, 65); }
             
             body { margin: 10; font-family: Arial, Helvetica, sans-serif; }
             input {width: 50%;}
@@ -14,10 +14,10 @@
           #container {
                 position: absolute;
                 z-index: 100;
-                top: 0;
+                top: 10px
                 margin: 10px;
                 padding: 10px;
-                background-color: black;
+               /*  background-color: black; */
                 color: rgb(255, 255, 255);
                 width: 500px;
                 font-family: monospace;
@@ -55,8 +55,7 @@
     <body>
         <div id="loader"></div> 
         <div id="container">
-
-                <audio id= "audio1"  onloadeddata="setHalfVolume()"autoplay loop volume >
+                <audio id= "audio1"  autoplay loop  >
                     <source src="ambient.wav"  type="audio/mp3">
                 </audio>
             <div id="overlay">
@@ -76,15 +75,18 @@
                     <input type="range" id="Trame de sructure" name="Trame de sructure" min="2" max="12" value="3" step="1">
                     <label for="Trame de sructure">Structure Span</label>
                 </div>
-                <button id="download" onclick="download()" disabled>Download</button>
+                <div><button id="shot" disabled>Screenshot</button></div>
+                <div style="height:20px; width:100%; clear:both;"></div>
+                <div><button style="background-color:rgb(0,99,65)  "  id="downloadButton" disabled>   تحميل  منزل </button></div>
                 
+
             </div>
         </div>
         <script>
 
             //this is for music background
             var audio = document.getElementById("audio1");
-            audio.volume = 0.5;
+            audio.volume = 0.1;
           </script>
         <script type="module" src="mmmtest.js"></script>
     </body>

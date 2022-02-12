@@ -9,8 +9,9 @@ import { Rhino3dmLoader } from "https://cdn.jsdelivr.net/npm/three@0.124.0/examp
 
 const definitionName = "mmm.gh";
 
-
-
+const data = {
+  definition: 'mmm.gh',
+}
 
 // Set up sliders
 const length_slider = document.getElementById('Length')
@@ -58,6 +59,10 @@ rhino3dm().then(async m => {
   compute();
 });
 
+//calling download function
+const downloadButton = document.getElementById("downloadButton")
+downloadButton.onclick = download
+
 
 
 //set up tthe sliderrs
@@ -91,10 +96,14 @@ async function compute() {
 
   doc = new rhino.File3dm();
 
-  // hide spinner
-  document.getElementById("loader").style.display = "none";
+    // hide spinner and enable download and screenshot button
+   document.getElementById("loader").style.display = "none";
+   downloadButton.disabled = false
+   shot.disabled = false
 
-  //decode grasshopper objects and put them into a rhino document
+
+
+   //decode grasshopper objects and put them into a rhino document
   for (let i = 0; i < res.values.length; i++) {
     for (const [key, value] of Object.entries(res.values[i].InnerTree)) {
       for (const d of value) {
@@ -149,6 +158,9 @@ async function compute() {
           const threeColor = new THREE.Color("rgb(" + col + ")");
           const mat = new THREE.LineBasicMaterial({ color: threeColor });
           child.material = mat;
+
+
+          
         }
       }
     });
@@ -156,6 +168,7 @@ async function compute() {
     ///////////////////////////////////////////////////////////////////////
     // add object graph from rhino model to three.js scene
     scene.add(object);
+
 
 
   });
@@ -168,6 +181,7 @@ function onSliderChange() {
 }
 
 
+
 // THREE BOILERPLATE //
 let scene, camera, renderer, controls;
 
@@ -178,29 +192,15 @@ function init() {
 THREE.Object3D.DefaultUp = new THREE.Vector3( 0, 0, 1 )
   // create a scene and a camera
   scene = new THREE.Scene()
-  scene.background = new THREE.Color(0x0000);
+  scene.background = new THREE.Color(0xb7312c);
   var aspect = window.innerWidth / window.innerHeight;
   var d = 30;
   camera = new THREE.OrthographicCamera( - d * aspect, d * aspect, d, - d, 1, 1000 );
-  
   camera.position.set( -20, 20, 20 ); // all components equal
   camera.lookAt( scene.position ); // or the origin
 
-  /**
- * This function is called when the download button is clicked
- */
-function download () {
-  // write rhino doc to "blob"
-  const bytes = doc.toByteArray()
-  const blob = new Blob([bytes], {type: "application/octect-stream"})
-
-  // use "hidden link" trick to get the browser to download the blob
-  const filename = data.definition.replace(/\.gh$/, '') + '.3dm'
-  const link = document.createElement('a')
-  link.href = window.URL.createObjectURL(blob)
-  link.download = filename
-  link.click()
-}
+  // add Screenshot listener
+document.getElementById("shot").addEventListener('click', takeScreenshot);
 
   // create the renderer and add it to the html
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -212,7 +212,7 @@ function download () {
 
   // add a directional light
   const directionalLight = new THREE.DirectionalLight(0xffffff);
-  directionalLight.intensity =20;
+  directionalLight.intensity =3;
   scene.add(directionalLight);
 
   const light = new THREE.AmbientLight( 0x404040 ); // soft white light
@@ -220,17 +220,19 @@ function download () {
 
   const hemiLight = new THREE.HemisphereLight( 0x404040 , 0x404040 , 1);
   hemiLight.color.setHSL( 0.6, 1, 0.6 );
-  hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
-  hemiLight.position.set( 0, 0, 100 );
+  hemiLight.groundColor.setHSL( 0.095, 0.75, 1 );
+  hemiLight.position.set( 0, 0, 200 );
   scene.add( hemiLight );
+
+ 
+
   
-
-
-  
-
-
   animate();
 }
+
+
+
+
 
 function animate() {
   requestAnimationFrame(animate);
@@ -246,9 +248,6 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-
-requestAnimationFrame( animate );
-
     
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -262,3 +261,38 @@ function meshToThreejs(mesh, material) {
   const geometry = loader.parse(mesh.toThreejsJSON());
   return new THREE.Mesh(geometry, material);
 }
+
+
+   //This function is called when the download button is clicked
+
+function download () {
+  // write rhino doc to "blob"
+  const bytes = doc.toByteArray()
+  const blob = new Blob([bytes], {type: "application/octect-stream"})
+// use "hidden link" trick to get the browser to download the blob
+  const filename = data.definition.replace(/\.gh$/, '') + '.3dm'
+  const link = document.createElement('a')
+  link.href = window.URL.createObjectURL(blob)
+  link.download = filename
+  link.click()
+ }
+
+//CALLING FUNCTION TAKE SCREENSHOT
+
+function takeScreenshot() {
+
+      renderer.render(scene, camera);
+      renderer.domElement.toBlob(function(blob){
+        var b = document.createElement('a');
+        var url = URL.createObjectURL(blob);
+        b.href = url;
+        b.download = 'maison.png';
+        b.click();
+      }, 'image/png', 3.0);
+   }
+
+
+
+
+ 
+
